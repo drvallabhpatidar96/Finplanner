@@ -1,0 +1,171 @@
+{
+  "app_name": "FinPlanner",
+  "personality": "7 Dark-First Utility",
+  "personality_one_liner": "A fast, tactical financial command center built for speed, immediate hierarchy, and zero decorative friction.",
+  "color": {
+    "surface": "#121212",
+    "onSurface": "#FFFFFF",
+    "surfaceSecondary": "#1E1E1E",
+    "onSurfaceSecondary": "#E0E0E0",
+    "surfaceTertiary": "#2C2C2C",
+    "onSurfaceTertiary": "#BDBDBD",
+    "surfaceInverse": "#F5F5F5",
+    "onSurfaceInverse": "#121212",
+    "brand": "#D35400",
+    "onBrand": "#FFFFFF",
+    "brandPrimary": "#E55934",
+    "onBrandPrimary": "#FFFFFF",
+    "brandSecondary": "#D87D4A",
+    "onBrandSecondary": "#121212",
+    "brandTertiary": "#3E2723",
+    "onBrandTertiary": "#FFCCBC",
+    "success": "#66BB6A",
+    "onSuccess": "#1B5E20",
+    "warning": "#FFA726",
+    "onWarning": "#E65100",
+    "error": "#E57373",
+    "onError": "#B71C1C",
+    "info": "#8D6E63",
+    "onInfo": "#3E2723",
+    "border": "#333333",
+    "borderStrong": "#555555",
+    "divider": "#2A2A2A",
+    "muted": "#757575"
+  },
+  "typography": {
+    "displayFontFamily": "Barlow Condensed",
+    "textFontFamily": "DM Sans",
+    "scale": {
+      "sm": 12,
+      "base": 14,
+      "lg": 16,
+      "xl": 20,
+      "2xl": 24
+    }
+  },
+  "spacing": {
+    "rule": "Handle spacing correctly dont have extra spaces where its not required, handle padding and margin corectly and subtle for buttons and components",
+    "xs": 4,
+    "sm": 8,
+    "md": 12,
+    "lg": 16,
+    "xl": 24,
+    "2xl": 32,
+    "3xl": 48
+  },
+  "radius_tokens": {
+    "sm": 6,
+    "md": 12,
+    "lg": 20,
+    "pill": 999
+  },
+  "shadow_tier": "0",
+  "navigation": "bottom_tabs",
+  "icon_set": "Phosphor",
+  "glassmorphism": {
+    "enabled": "false",
+    "do's": [
+      "Use solid surfaceSecondary and dividers for elevation, as this is a dark utility command center."
+    ],
+    "dont's": [
+      "No blur or glassmorphism to preserve performance and tactical sharpness."
+    ]
+  },
+  "platform_libraries": {
+    "glass": {
+      "ios": "expo-glass-effect",
+      "android": "expo-blur",
+      "low_end_android_fallback": "solid surfaceSecondary"
+    },
+    "image": "expo-image",
+    "blur": "expo-blur",
+    "bottom_sheet": "@gorhom/bottom-sheet",
+    "animation": "react-native-reanimated",
+    "gesture": "react-native-gesture-handler"
+  },
+  "screens": [
+    {
+      "name": "SocialSignIn",
+      "purpose": "Frictionless entry point using Google authentication.",
+      "states": {
+        "loading": "Centered spinner on dark background.",
+        "empty": "N/A",
+        "error": "Standard alert toast or banner indicating auth failure."
+      },
+      "layout": "Centered layout with app logo (Barlow Condensed display text) and a single Google Sign-in button. Cinematic dark gradient background used to set the premium tactical tone."
+    },
+    {
+      "name": "Dashboard",
+      "purpose": "A live operational surface showing balances, credit card dues, and upcoming items at a glance.",
+      "states": {
+        "loading": "Skeleton loaders for balances and lists using surfaceTertiary.",
+        "empty": "No accounts connected yet. Primary CTA: 'Add Account'.",
+        "error": "Error banner below the header, 'Retry' button to fetch balances."
+      },
+      "layout": "Header: Workspace Switcher (Segmented Control for Personal/Shared). Top section: Oversized numeric display for Net Balance. Middle: Horizontal scroll of Accounts (Bank, CC, Cash). Bottom: Stacked list of 'Upcoming Dues'. Persistent FAB in bottom right for rapid manual entry."
+    },
+    {
+      "name": "AddTransaction",
+      "purpose": "High-speed numeric entry for manual logging of expenses, transfers, and splits.",
+      "states": {
+        "loading": "Disabled keypad with saving spinner.",
+        "empty": "N/A",
+        "error": "Validation error text below the amount display."
+      },
+      "layout": "Two-stage flow. Stage 1: Half-screen huge numeric keypad with a massive amount display above it. Stage 2 (or bottom sheet): Metadata review (Category, Date, Payee, Split details). Done action sticky at the bottom."
+    },
+    {
+      "name": "CreditCardPlanner",
+      "purpose": "Planner-grade view of credit card statements, minimum dues, and revolving estimates.",
+      "states": {
+        "loading": "Skeleton rows for each credit card.",
+        "empty": "No credit cards tracked. 'Add Card' CTA.",
+        "error": "Retry fetching card data."
+      },
+      "layout": "Vertical list of cards. Each card is a module showing: Card Name, Statement Balance (huge), Unbilled (smaller). Below the cards: segmented controls or tabs to view 'Upcoming Payments' vs 'Rewards'."
+    },
+    {
+      "name": "PremiumUpgrade",
+      "purpose": "Upsell ad-free experience and bill scan capabilities.",
+      "states": {
+        "loading": "Spinner over the purchase button.",
+        "empty": "N/A",
+        "error": "Transaction failed message."
+      },
+      "layout": "Hero image/texture background. Large display text. Checkmark list of premium features (No Ads, Bill Scan). Sticky 'Upgrade Now' CTA pinned to the bottom."
+    }
+  ],
+  "images": {
+    "google_logo": {
+      "url": "https://images.unsplash.com/photo-1678483790053-71367bc7a02c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1NTJ8MHwxfHNlYXJjaHwxfHxnb29nbGUlMjBsb2dvJTIwcG5nJTIwdHJhbnNwYXJlbnR8ZW58MHx8fHwxNzkwODc0ODA2fDA&ixlib=rb-4.1.0&q=85",
+      "alt": "Google Logo transparent on dark"
+    },
+    "premium_hero_bg": {
+      "url": "https://images.unsplash.com/photo-1635776062360-af423602aff3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2NzB8MHwxfHNlYXJjaHwxfHxkYXJrJTIwc2xlZWslMjBwcmVtaXVtJTIwZ3JhZGllbnQlMjBzcGFjZXxlbnwwfHx8fDE3OTA4NzQ4MDB8MA&ixlib=rb-4.1.0&q=85",
+      "alt": "Dark sleek premium gradient space"
+    },
+    "shared_workspace_header_bg": {
+      "url": "https://images.unsplash.com/photo-1517241034903-9a4c3ab12f00?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjY2NzN8MHwxfHNlYXJjaHwxfHxkYXJrJTIwYWJzdHJhY3QlMjBnZW9tZXRyaWMlMjBwYXR0ZXJufGVufDB8fHx8MTc5MDg3NDgwMHww&ixlib=rb-4.1.0&q=85",
+      "alt": "Dark abstract geometric pattern"
+    }
+  },
+  "haptics": {
+    "events": {
+      "tab_press": "light",
+      "keypad_press": "light",
+      "workspace_switch": "medium",
+      "transaction_save": "success",
+      "error_state": "error"
+    }
+  },
+  "instructions_to_main_agent": [
+    "Strictly follow the 7 Dark-First Utility guidelines. Pure black is avoided; use deep obsidian (#121212) and graphite (#1E1E1E) to reduce eye strain while preserving high contrast.",
+    "Implement the Workspace Switcher prominently at the top of the Dashboard. Use `shared_workspace_header_bg` subtly or tint changes to clearly delineate Personal vs. Shared contexts.",
+    "For the 'Add Transaction' flow, build a massive, fast numeric keypad that functions like a calculator. Do not use standard native text inputs for the amount if possible—rely on a custom keypad view to maximize speed and thumb-reach.",
+    "Do not use Indigo, Blue, or Purple. Stick to the provided Rust/Orange (`#E55934`) for primary actions, which gives a 'heat and effort' tactical feel.",
+    "Ensure all tap targets are at least 44x44pt. Use `Barlow Condensed` for all major metrics and balances to support high-density scanning, and `DM Sans` for readable lists and metadata.",
+    "Do not use glassmorphism or blur effects. Use solid `surfaceSecondary` and dividers for structure.",
+    "Include a dedicated placeholder ad slot (as requested in the brief) that is visually distinct from the finance content, possibly using a bordered `surfaceTertiary` container.",
+    "Remember to include haptics for all keypad entries and tab switches."
+  ]
+}
