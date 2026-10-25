@@ -1,0 +1,45 @@
+{
+  "summary": "Code-health/cleanup pass verification: backend pytest regression run 3x under pinned xdist (-n 2 --dist loadscope). Run2 = 79/79 PASS; Run1 = 78/79 (single transient ConnectTimeoutError to public preview host, not app code); Run3 = 78/79 (email proxy 429 rate-limit on test_create_invite_sends_email despite built-in 3x/20s retries — confirmed environmental via backend logs, passed on isolated serial retry per playbook). API smoke: auth/me 200 (premium=true), workspaces 200, dashboard 200, accounts 200, meta/currencies 200 (live FX), auth/apple garbage token 401. Resend-invite intentional behavior change VERIFIED: create shared ws -> invite member@finplanner.app (undeliverable) -> resend returns HTTP 200 {ok:true, email_sent:false}, workspace cleaned up. Frontend smoke (web preview, seeded token): dashboard renders net balance ₹2.04L + 2 accounts; /add-transaction keypad+Next -> Details stage; ToggleRow extraction works identically (refund toggle in personal ws, split+payer in shared ws, split expands on tap); Google button on /login. No console errors, only one style-deprecation warning.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "POST /api/bill-scan (test only)", "issue": "test_bill_scan_non_premium_403 failed once in run1 with urllib3 ConnectTimeoutError to family-budget-182.preview.emergentagent.com:443 — transient network flake to public host, passed in runs 2 & 3. Not app code."},
+      {"endpoint": "POST /api/workspaces/{id}/invites (test only)", "issue": "test_create_invite_sends_email failed once in run3: Emergent email proxy returned 429 'email rate limit exceeded' even after 3 retries/20s backoff (backend log evidence). Environmental; passed on serial retry. Known quirk flagged by main agent."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": [
+      {"component": "fab.tsx", "issue": "RN web console warning: 'shadow*' style props are deprecated, use boxShadow (shadowColor/shadowOpacity/shadowRadius/shadowOffset). Reference: /app/frontend/src/components/fab.tsx:45-48. Warning only; no visual defect observed."}
+    ]
+  },
+  "test_report_links": [
+    "/app/test_reports/pytest/pytest_results_iter4_run1.xml",
+    "/app/test_reports/pytest/pytest_results_iter4_run2.xml",
+    "/app/test_reports/pytest/pytest_results_iter4_run3.xml",
+    "/app/test_reports/shots_iter4/01_dashboard.png",
+    "/app/test_reports/shots_iter4/02_details_personal.png",
+    "/app/test_reports/shots_iter4/03_details_shared.png"
+  ],
+  "action_items": [
+    "Optional: migrate shadow* props to boxShadow in /app/frontend/src/components/fab.tsx:45-48 to silence RN web deprecation warning.",
+    "Optional: remove unused `uuid` imports in tests/test_finplanner_e2e.py:7 and tests/test_finplanner_put_billscan.py:7 (ruff F401).",
+    "No action needed on split refactor, ToggleRow extraction, resend-invite change, or auth — all verified working.",
+    "Known pre-existing P0/P1 bugs in /app/memory/code_review_findings.md remain deferred to Phase 2 per user-approved plan (not retested, not fixed)."
+  ],
+  "critical_code_review_comments": [
+    "Module split is clean: server.py (47 lines) is a thin entrypoint; routes/ modules import shared db/router/security correctly; no duplicate route registration; ruff shows only style-level noise (54 findings, all non-functional: UP045/BLE001/I001/F401-in-tests).",
+    "resend_invite (routes/workspaces.py:140-162) correctly mirrors create_invite's graceful email handling — verified live with undeliverable recipient.",
+    "apple_auth 401 path verified with garbage token; Apple JWKS mock exists only in tests/test_apple_auth.py as documented.",
+    "login.tsx renders Apple button conditionally ({AppleAuth && ...}) — its absence on web preview is expected, not a bug."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (79/79 in run2; 2 isolated env flakes in runs 1&3 both passed on retry)", "frontend": "100% (all smoke steps passed)"},
+  "seed_data_creation": "Created + soft-deleted TEST_ResendWS (ws_038ecdcca0364bab) and one invite (inv_5dd3ea4c5fc643df) for resend verification. No persistent test data left.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Split refactor + ToggleRow extraction verified clean. Both full-suite flakes were environmental (preview-host connect timeout; email proxy 429). If running full pytest again, avoid concurrent manual email-sending curls (my resend test likely contributed to run3's rate limit). Receipt fixtures /tmp/receipt_jpg_b64.txt + /tmp/receipt_pdf_b64.txt present and working. Public URL: https://family-budget-182.preview.emergentagent.com (from frontend/.env EXPO_PUBLIC_BACKEND_URL; note the env key is EXPO_PUBLIC_BACKEND_URL, not EXPO_BACKEND_URL). UI auth: localStorage finplanner_session_token (JSON-quoted); current workspace override via localStorage finplanner_current_ws (JSON-quoted ws id).",
+  "rca_of_issue": "Flake 1 (test_bill_scan_non_premium_403, run1): requests ConnectTimeout to public preview host mid-suite — transient ingress/network issue; reproduction: rerun suite; mitigation: retry, no code change. Flake 2 (test_create_invite_sends_email, run3): emailer.py logged '429 email rate limit exceeded' from Emergent email proxy on all 3 test retries — proxy rate-limits parallel email bursts (compounded by concurrent manual resend-invite curl); mitigation per playbook: wait 60s, retry serially (-n 0) -> PASSED. No app defects found."
+}
